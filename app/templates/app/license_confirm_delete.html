@@ -1,0 +1,62 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="h3">Delete License</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <p>Are you sure you want to delete the license information for <strong>{{ license.first_name }} {{ license.last_name }}</strong>?</p>
+                    <p class="mb-0"><strong>Warning:</strong> This action cannot be undone and will permanently delete all associated photos.</p>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong>Name:</strong> {{ license.first_name }} {{ license.last_name }}</p>
+                        <p><strong>Email:</strong> {{ license.email }}</p>
+                        <p><strong>Expiry Date:</strong> {{ license.expiry_date }}</p>
+                        <p><strong>Status:</strong> 
+                            {% if license.is_expired %}
+                                <span class="badge bg-danger">Expired</span>
+                            {% elif license.expires_within_month %}
+                                <span class="badge bg-danger">Expires in 1 Month</span>
+                            {% elif license.expires_within_three_months %}
+                                <span class="badge bg-warning text-dark">Expires in 3 Months</span>
+                            {% else %}
+                                <span class="badge bg-success">Valid</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            {% if license.front_photo %}
+                            <div class="col-6">
+                                <p><strong>Front Photo:</strong></p>
+                                <img src="{{ license.front_photo.url }}" alt="Front of license" class="img-thumbnail" style="max-height: 100px;">
+                            </div>
+                            {% endif %}
+                            {% if license.back_photo %}
+                            <div class="col-6">
+                                <p><strong>Back Photo:</strong></p>
+                                <img src="{{ license.back_photo.url }}" alt="Back of license" class="img-thumbnail" style="max-height: 100px;">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex flex-column flex-md-row">
+                        <button type="submit" class="btn btn-danger mb-2 mb-md-0 me-md-2">Confirm Delete</button>
+                        <a href="{% url 'license_detail' license.pk %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
