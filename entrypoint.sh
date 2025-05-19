@@ -10,4 +10,9 @@ python manage.py migrate
 
 # Start the server
 echo "Starting server..."
-gunicorn licenseexpirary.wsgi:application --bind 0.0.0.0:${PORT:-8000}
+# Check if PORT is set, otherwise default to 8000
+if [ -z "$PORT" ]; then
+    PORT=8000
+fi
+echo "Using port: $PORT"
+gunicorn licenseexpirary.wsgi:application --bind 0.0.0.0:$PORT

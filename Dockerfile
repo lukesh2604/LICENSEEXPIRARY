@@ -29,7 +29,11 @@ RUN mkdir -p /app/staticfiles && python manage.py collectstatic --noinput
 
 # Create a script to run migrations and start the server
 COPY ./entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+# Ensure proper line endings and execution permissions
+RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
 # Run entrypoint script
-CMD ["/app/entrypoint.sh"]
+CMD ["/bin/bash", "/app/entrypoint.sh"]
+
+# Alternative CMD in case entrypoint script fails
+# CMD gunicorn licenseexpirary.wsgi:application --bind 0.0.0.0:$PORT
