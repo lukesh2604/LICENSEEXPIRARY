@@ -27,9 +27,20 @@ COPY . .
 # Create static directory and collect static files
 RUN mkdir -p /app/staticfiles && python manage.py collectstatic --noinput
 
-# Run migrations during build (for testing - in production, run manually after deployment)
-RUN python manage.py migrate
+# Do not run migrations during build, they'll be run at startup
+# Instead, ensure directories exist and permissions are correct
 
-# Use a bash shell to run the application
-# This allows for proper environment variable expansion
-CMD bash -c "python manage.py migrate && gunicorn licenseexpirary.wsgi:application --bind 0.0.0.0:\${PORT:-8000}"
+# Create script to run at container startup
+RUN echo '#!/bin/bash\n\
+echo "Waiting for PostgreSQL..."\n\
+sleep 5\n\
+echo "Running migrations..."\n\
+python manage.py migrate\n\
+echo "Starting Gunicorn..."\n\
+PORT="${PORT:-8000}"\n\
+echo "Using port: $PORT"\n\
+exec gunicorn licenseexpirary.wsgi:application --bind 0.0.0.0:$PORT --log-level debug\n\
+' > /app/start.sh && chmod +x /app/start.sh
+
+# Use the startup script
+CMD ["/app/start.sh"]

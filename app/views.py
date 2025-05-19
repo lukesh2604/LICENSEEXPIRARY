@@ -7,6 +7,19 @@ from django.utils import timezone
 from .models import License
 from .forms import LicenseForm
 
+def root_healthcheck(request):
+    """
+    Additional healthcheck at the root path to handle Railway's default healthcheck.
+    """
+    return HttpResponse("Application is healthy", status=200)
+
+def healthcheck(request):
+    """
+    Simple view to respond to healthchecks with a 200 OK response.
+    This endpoint doesn't require authentication and is used by Railway for deployment checks.
+    """
+    return HttpResponse("OK", status=200)
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
