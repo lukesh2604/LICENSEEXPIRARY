@@ -32,6 +32,11 @@ RUN mkdir -p /app/staticfiles && python manage.py collectstatic --noinput
 
 # Create script to run at container startup
 RUN echo '#!/bin/bash\n\
+echo "Debugging environment variables:"\n\
+echo "DATABASE_URL: $DATABASE_URL"\n\
+echo "PORT: $PORT"\n\
+echo "Ensuring no .env file with conflicting settings exists:"\n\
+rm -f .env\n\
 echo "Waiting for PostgreSQL..."\n\
 sleep 5\n\
 echo "Running migrations..."\n\
