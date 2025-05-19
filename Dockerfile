@@ -24,6 +24,9 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # Copy project
 COPY . .
 
+# Delete any .env file to avoid conflicts with Railway environment variables
+RUN rm -f .env || true
+
 # Create static directory and collect static files
 RUN mkdir -p /app/staticfiles && python manage.py collectstatic --noinput
 

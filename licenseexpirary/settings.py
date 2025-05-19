@@ -85,12 +85,32 @@ WSGI_APPLICATION = 'licenseexpirary.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # Use DATABASE_URL environment variable if available, else use SQLite
-DATABASES = {
-    'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600
-    )
-}
+# For Railway deployment, we need to handle database configuration specially
+import os
+import sys
+import dj_database_url
+
+# Check if we're running on Railway
+ON_RAILWAY = os.environ.get('RAILWAY_ENVIRONMENT', '') == 'production'
+
+# Default to SQLite for local development
+DEFAULT_DATABASE_URL = f'sqlite:///{BASE_DIR / "db.sqlite3"}'
+
+# Override DATABASE_URL if it contains 'db' as the hostname (which won't work on Railway)
+raw_database_url = os.environ.get('DATABASE_URL', DEFAULT_DATABASE_URL)
+if ON_RAILWAY and 'db' in raw_database_url:
+    print("WARNING: Invalid DATABASE_URL detected with 'db' hostname. Using Railway-provided DATABASE_URL instead.")
+    # On Railway, let dj_database_url pick up the DATABASE_URL automatically
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DEFAULT_DATABASE_URL,
+            conn_max_age=600
+        )
+    }
 
 
 # Password validation
