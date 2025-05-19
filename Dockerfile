@@ -1,4 +1,4 @@
-FROM python:3.13-slim
+FROM python:3.11-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -8,18 +8,28 @@ ENV DEBUG False
 # Set work directory
 WORKDIR /app
 
+# Install system dependencies including PostgreSQL client libraries
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    libpq-dev \
+    gcc \
+    python3-dev \
+    musl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Copy project
 COPY . .
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
+# Create static directory and collect static files
+RUN mkdir -p /app/staticfiles && python manage.py collectstatic --noinput
 
-# Run migrations
-RUN python manage.py migrate
+# Create a script to run migrations and start the server
+COPY ./entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
-# Run gunicorn
-CMD gunicorn licenseexpirary.wsgi:application --bind 0.0.0.0:$PORT
+# Run entrypoint script
+CMD ["/app/entrypoint.sh"]
