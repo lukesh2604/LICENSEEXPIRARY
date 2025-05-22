@@ -21,12 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# For development:
 SECRET_KEY = 'django-insecure-x#6xmi+*b-^cwg&2ay^z02=l2s358l$*b2px%k++mc36jxfd#c'
+# For production, use environment variable:
+# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-x#6xmi+*b-^cwg&2ay^z02=l2s358l$*b2px%k++mc36jxfd#c')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Set DEBUG based on environment (True for development, False for production)
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
+# Add your PythonAnywhere domain to allowed hosts   
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://*.ngrok-free.app', 'https://*.ngrok.io']
 
 
 # Application definition

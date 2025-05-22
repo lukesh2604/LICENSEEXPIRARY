@@ -8,66 +8,73 @@ db.sqlite3
 db.sqlite3-journal
 media
 
-# If you are using a virtual environment
+# If you are using a virtualenv
 venv/
 env/
 ENV/
 
-# Python # 
-*.py[cod] 
-*$py.class 
-*.so 
-.Python 
-build/ 
-develop-eggs/ 
-dist/ 
-downloads/ 
-eggs/ 
-.eggs/ 
-lib/ 
-lib64/ 
-parts/ 
-sdist/ 
-var/ 
-wheels/ 
-*.egg-info/ 
-.installed.cfg 
-*.egg 
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 MANIFEST
 
-# Jupyter Notebook 
-.ipynb_checkpoints 
+# PyInstaller
+*.manifest
+*.spec
 
-# Visual Studio Code # 
-.vscode/* 
-!.vscode/settings.json 
-!.vscode/tasks.json 
-!.vscode/launch.json 
-!.vscode/extensions.json 
-.history
-
-# PyCharm #
-.idea/
-*.iml
-*.iws
-*.ipr
-*.iws
-out/
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
 # Unit test / coverage reports
 htmlcov/
 .tox/
-.nox/
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
 *.cover
-*.py,cover
 .hypothesis/
 .pytest_cache/
-cover/
+
+# Translations
+*.mo
+
+# Django stuff:
+staticfiles/
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
 
 # Environments
 .env
@@ -78,7 +85,50 @@ ENV/
 env.bak/
 venv.bak/
 
-# macOS
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+
+# Pycharm
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+
+# Local development settings
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# SQLite
+*.sqlite3
+*.db
+
+# Log files
+*.log
+
+# ngrok
+ngrok.exe
+
+# Secret key file
+.secret_key
+
+# Mac OS
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -86,12 +136,4 @@ venv.bak/
 # Windows
 Thumbs.db
 ehthumbs.db
-desktop.ini
-
-# Node.js
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# Django static files collected 
-staticfiles/
+Desktop.ini
